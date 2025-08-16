@@ -16,3 +16,17 @@ void ALunarLanderPlayerController::BeginPlay()
 		Subsystem->AddMappingContext(InputMappingContext, 0);
 	}
 }
+
+//void ALunarLanderPlayerController::OnPossess(APawn* NewPawn)
+//{
+//    Super::OnPossess(NewPawn);
+//
+//    if (NewPawn->IsA(ALanderPawn::StaticClass()))
+//    {
+//        // Update HUD to Lander Mode
+//    }
+//    else if (NewPawn->IsA(AFPSCharacter::StaticClass()))
+//    {
+//        // Update HUD to FPS Mode
+//    }
+//}

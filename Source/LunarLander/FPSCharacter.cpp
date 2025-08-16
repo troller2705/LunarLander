@@ -6,6 +6,7 @@
 AFPSCharacter::AFPSCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
+    //GravityGun = CreateDefaultSubobject<UGravityGunComponent>(TEXT("GravityGunComponent"));
 }
 
 void AFPSCharacter::BeginPlay()
@@ -23,6 +24,10 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
     PlayerInputComponent->BindAxis("MoveForward", this, &AFPSCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &AFPSCharacter::MoveRight);
     PlayerInputComponent->BindAction("ExitLander", IE_Pressed, this, &AFPSCharacter::ReturnToLander);
+
+    /*PlayerInputComponent->BindAction("Grab", IE_Pressed, GravityGun, &UGravityGunComponent::Grab);
+    PlayerInputComponent->BindAction("Grab", IE_Released, GravityGun, &UGravityGunComponent::Release);
+    PlayerInputComponent->BindAction("Launch", IE_Pressed, GravityGun, &UGravityGunComponent::Launch);*/
 }
 
 void AFPSCharacter::MoveForward(float Value)

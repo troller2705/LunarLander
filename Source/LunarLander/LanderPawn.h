@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "LunarLanderCharacter.h"
 #include "LanderPawn.generated.h"
 
 UCLASS()
@@ -9,23 +10,15 @@ class LUNARLANDER_API ALanderPawn : public APawn
 {
     GENERATED_BODY()
 
-    /** Jump Input Action */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-    UInputAction* JumpAction;
-
-    /** Move Input Action */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-    UInputAction* MoveAction;
-
     public:
         ALanderPawn();
 
     protected:
         virtual void BeginPlay() override;
-        virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
+        virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-        void ThrustForward(const FInputActionValue& Value);
-        void ThrustRight(const FInputActionValue& Value);
+        void ThrustForward(float Value);
+        void ThrustRight(float Value);
         void ExitLander();
 
     public:

@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+//#include "GravityGunComponent.h"
 #include "FPSCharacter.generated.h"
 
 UCLASS()
@@ -25,6 +26,10 @@ public:
 
     UPROPERTY(EditAnywhere)
     TSubclassOf<class ALanderPawn> LanderPawnClass;
+
+    /*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gravity Gun")
+    UGravityGunComponent* GravityGun;*/
+
 
 private:
     UPROPERTY()
