@@ -19,7 +19,7 @@ protected:
 
     void MoveForward(float Value);
     void MoveRight(float Value);
-    void ReturnToLander();
+    //void ReturnToLander();
 
 public:
     virtual void Tick(float DeltaTime) override;

@@ -23,7 +23,7 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
     PlayerInputComponent->BindAxis("MoveForward", this, &AFPSCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &AFPSCharacter::MoveRight);
-    PlayerInputComponent->BindAction("ExitLander", IE_Pressed, this, &AFPSCharacter::ReturnToLander);
+    //PlayerInputComponent->BindAction("ExitLander", IE_Pressed, this, &AFPSCharacter::ReturnToLander);
 
     /*PlayerInputComponent->BindAction("Grab", IE_Pressed, GravityGun, &UGravityGunComponent::Grab);
     PlayerInputComponent->BindAction("Grab", IE_Released, GravityGun, &UGravityGunComponent::Release);
@@ -42,22 +42,22 @@ void AFPSCharacter::MoveRight(float Value)
         AddMovementInput(GetActorRightVector(), Value);
 }
 
-void AFPSCharacter::ReturnToLander()
-{
-    if (LanderPawnClass)
-    {
-        APlayerController* PlayerController = Cast<APlayerController>(GetController());
-        if (PlayerController)
-        {
-            FVector SpawnLocation = GetActorLocation() + FVector(100.f, 0.f, 0.f);
-            FRotator SpawnRotation = GetActorRotation();
-
-            ALanderPawn* Lander = GetWorld()->SpawnActor<ALanderPawn>(LanderPawnClass, SpawnLocation, SpawnRotation);
-            if (Lander)
-            {
-                PlayerController->Possess(Lander);
-                Destroy(); // Remove the FPS character after switching
-            }
-        }
-    }
-}
+//void AFPSCharacter::ReturnToLander()
+//{
+//    if (LanderPawnClass)
+//    {
+//        APlayerController* PlayerController = Cast<APlayerController>(GetController());
+//        if (PlayerController)
+//        {
+//            FVector SpawnLocation = GetActorLocation() + FVector(100.f, 0.f, 0.f);
+//            FRotator SpawnRotation = GetActorRotation();
+//
+//            ALanderPawn* Lander = GetWorld()->SpawnActor<ALanderPawn>(LanderPawnClass, SpawnLocation, SpawnRotation);
+//            if (Lander)
+//            {
+//                PlayerController->Possess(Lander);
+//                Destroy(); // Remove the FPS character after switching
+//            }
+//        }
+//    }
+//}

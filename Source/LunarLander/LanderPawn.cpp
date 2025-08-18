@@ -31,7 +31,7 @@ void ALanderPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 {
     PlayerInputComponent->BindAxis("MoveForward", this, &ALanderPawn::ThrustForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &ALanderPawn::ThrustRight);
-    PlayerInputComponent->BindAction("ExitLander", IE_Pressed, this, &ALanderPawn::ExitLander);
+    //PlayerInputComponent->BindAction("ExitLander", IE_Pressed, this, &ALanderPawn::ExitLander);
 }
 
 void ALanderPawn::ThrustForward(float Value)
@@ -46,24 +46,24 @@ void ALanderPawn::ThrustRight(float Value)
         LanderMesh->AddForce(GetActorRightVector() * Value * 50000.f);
 }
 
-void ALanderPawn::ExitLander()
-{
-    if (FPSCharacterClass)
-    {
-        FActorSpawnParameters SpawnParams;
-        SpawnParams.Owner = this;
-
-        FVector SpawnLocation = GetActorLocation() + FVector(100.f, 0.f, 0.f);
-        FRotator SpawnRotation = GetActorRotation();
-
-        SpawnedFPSCharacter = GetWorld()->SpawnActor<AFPSCharacter>(FPSCharacterClass, SpawnLocation, SpawnRotation, SpawnParams);
-        if (SpawnedFPSCharacter)
-        {
-            AController* PlayerController = Cast<AController>(GetController());
-            if (PlayerController)
-            {
-                PlayerController->Possess(SpawnedFPSCharacter);
-            }
-        }
-    }
-}
+//void ALanderPawn::ExitLander()
+//{
+//    if (FPSCharacterClass)
+//    {
+//        FActorSpawnParameters SpawnParams;
+//        SpawnParams.Owner = this;
+//
+//        FVector SpawnLocation = GetActorLocation() + FVector(100.f, 0.f, 0.f);
+//        FRotator SpawnRotation = GetActorRotation();
+//
+//        SpawnedFPSCharacter = GetWorld()->SpawnActor<AFPSCharacter>(FPSCharacterClass, SpawnLocation, SpawnRotation, SpawnParams);
+//        if (SpawnedFPSCharacter)
+//        {
+//            AController* PlayerController = Cast<AController>(GetController());
+//            if (PlayerController)
+//            {
+//                PlayerController->Possess(SpawnedFPSCharacter);
+//            }
+//        }
+//    }
+//}

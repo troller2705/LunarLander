@@ -19,7 +19,7 @@ class LUNARLANDER_API ALanderPawn : public APawn
 
         void ThrustForward(float Value);
         void ThrustRight(float Value);
-        void ExitLander();
+        //void ExitLander();
 
     public:
         virtual void Tick(float DeltaTime) override;
