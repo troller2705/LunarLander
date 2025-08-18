@@ -2,11 +2,37 @@
 #include "GameFramework/PlayerController.h"
 #include "LanderPawn.h"
 #include "Kismet/GameplayStatics.h"
+#include "Animation/AnimInstance.h"
+#include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "InputActionValue.h"
+#include "Engine/LocalPlayer.h"
 
 AFPSCharacter::AFPSCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
-    //GravityGun = CreateDefaultSubobject<UGravityGunComponent>(TEXT("GravityGunComponent"));
+    GravityGun = CreateDefaultSubobject<UGravityGunComponent>(TEXT("GravityGunComponent"));
+
+    // Set size for collision capsule
+    GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
+
+    // Create a CameraComponent	
+    FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+    FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
+    FirstPersonCameraComponent->SetRelativeLocation(FVector(-10.f, 0.f, 60.f)); // Position the camera
+    FirstPersonCameraComponent->bUsePawnControlRotation = true;
+
+    // Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
+    Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
+    Mesh1P->SetOnlyOwnerSee(true);
+    Mesh1P->SetupAttachment(FirstPersonCameraComponent);
+    Mesh1P->bCastDynamicShadow = false;
+    Mesh1P->CastShadow = false;
+    //Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
+    Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
 }
 
 void AFPSCharacter::BeginPlay()
@@ -21,43 +47,69 @@ void AFPSCharacter::Tick(float DeltaTime)
 
 void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-    PlayerInputComponent->BindAxis("MoveForward", this, &AFPSCharacter::MoveForward);
-    PlayerInputComponent->BindAxis("MoveRight", this, &AFPSCharacter::MoveRight);
-    //PlayerInputComponent->BindAction("ExitLander", IE_Pressed, this, &AFPSCharacter::ReturnToLander);
+    // Set up action bindings
+    if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+    {
+        // Jumping
+        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
-    /*PlayerInputComponent->BindAction("Grab", IE_Pressed, GravityGun, &UGravityGunComponent::Grab);
+        // Moving
+        EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AFPSCharacter::Move);
+
+        // Looking
+        EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AFPSCharacter::Look);
+    }
+
+    PlayerInputComponent->BindAction("ExitLander", IE_Pressed, this, &AFPSCharacter::ReturnToLander);
+
+    PlayerInputComponent->BindAction("Grab", IE_Pressed, GravityGun, &UGravityGunComponent::Grab);
     PlayerInputComponent->BindAction("Grab", IE_Released, GravityGun, &UGravityGunComponent::Release);
-    PlayerInputComponent->BindAction("Launch", IE_Pressed, GravityGun, &UGravityGunComponent::Launch);*/
+    PlayerInputComponent->BindAction("Launch", IE_Pressed, GravityGun, &UGravityGunComponent::Launch);
 }
 
-void AFPSCharacter::MoveForward(float Value)
+void ALunarLanderCharacter::Move(const FInputActionValue& Value)
 {
-    if (Value != 0.f)
-        AddMovementInput(GetActorForwardVector(), Value);
+    // input is a Vector2D
+    FVector2D MovementVector = Value.Get<FVector2D>();
+
+    if (Controller != nullptr)
+    {
+        // add movement 
+        AddMovementInput(GetActorForwardVector(), MovementVector.Y);
+        AddMovementInput(GetActorRightVector(), MovementVector.X);
+    }
 }
 
-void AFPSCharacter::MoveRight(float Value)
+void ALunarLanderCharacter::Look(const FInputActionValue& Value)
 {
-    if (Value != 0.f)
-        AddMovementInput(GetActorRightVector(), Value);
+    // input is a Vector2D
+    FVector2D LookAxisVector = Value.Get<FVector2D>();
+
+    if (Controller != nullptr)
+    {
+        // add yaw and pitch input to controller
+        AddControllerYawInput(LookAxisVector.X);
+        AddControllerPitchInput(LookAxisVector.Y);
+    }
 }
 
-//void AFPSCharacter::ReturnToLander()
-//{
-//    if (LanderPawnClass)
-//    {
-//        APlayerController* PlayerController = Cast<APlayerController>(GetController());
-//        if (PlayerController)
-//        {
-//            FVector SpawnLocation = GetActorLocation() + FVector(100.f, 0.f, 0.f);
-//            FRotator SpawnRotation = GetActorRotation();
-//
-//            ALanderPawn* Lander = GetWorld()->SpawnActor<ALanderPawn>(LanderPawnClass, SpawnLocation, SpawnRotation);
-//            if (Lander)
-//            {
-//                PlayerController->Possess(Lander);
-//                Destroy(); // Remove the FPS character after switching
-//            }
-//        }
-//    }
-//}
+void AFPSCharacter::ReturnToLander()
+{
+    if (LanderPawnClass)
+    {
+        APlayerController* PlayerController = Cast<APlayerController>(GetController());
+        if (PlayerController)
+        {
+            FVector SpawnLocation = GetActorLocation() + FVector(100.f, 0.f, 0.f);
+            FRotator SpawnRotation = GetActorRotation();
+
+            ALanderPawn* Lander = GetWorld()->SpawnActor<ALanderPawn>(LanderPawnClass, SpawnLocation, SpawnRotation);
+            if (Lander)
+            {
+                PlayerController->Possess(Lander);
+                Destroy(); // Remove the FPS character after switching
+            }
+        }
+    }
+}
