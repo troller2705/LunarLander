@@ -59,13 +59,15 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
         // Looking
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AFPSCharacter::Look);
+
+        //Lander Swapping
+        EnhancedInputComponent->BindAction(ExitLanderAction, ETriggerEvent::Completed, this, &AFPSCharacter::ReturnToLander);
+
+        // Gravity Gun
+        EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, GravityGun, &UGravityGunComponent::Grab);
+        EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Completed, GravityGun, &UGravityGunComponent::Release);
+        EnhancedInputComponent->BindAction(LaunchAction, ETriggerEvent::Completed, GravityGun, &UGravityGunComponent::Launch);
     }
-
-    PlayerInputComponent->BindAction("ExitLander", IE_Pressed, this, &AFPSCharacter::ReturnToLander);
-
-    PlayerInputComponent->BindAction("Grab", IE_Pressed, GravityGun, &UGravityGunComponent::Grab);
-    PlayerInputComponent->BindAction("Grab", IE_Released, GravityGun, &UGravityGunComponent::Release);
-    PlayerInputComponent->BindAction("Launch", IE_Pressed, GravityGun, &UGravityGunComponent::Launch);
 }
 
 void ALunarLanderCharacter::Move(const FInputActionValue& Value)
@@ -96,17 +98,25 @@ void ALunarLanderCharacter::Look(const FInputActionValue& Value)
 
 void AFPSCharacter::ReturnToLander()
 {
+    //UE_LOG(LogTemp, Warning, TEXT("Returning to Lander"))
     if (LanderPawnClass)
     {
+        UE_LOG(LogTemp, Warning, TEXT("Lander Class Found"))
         APlayerController* PlayerController = Cast<APlayerController>(GetController());
         if (PlayerController)
         {
+            UE_LOG(LogTemp, Warning, TEXT("Player Controller Obtained"))
             FVector SpawnLocation = GetActorLocation() + FVector(100.f, 0.f, 0.f);
             FRotator SpawnRotation = GetActorRotation();
 
-            ALanderPawn* Lander = GetWorld()->SpawnActor<ALanderPawn>(LanderPawnClass, SpawnLocation, SpawnRotation);
+            FActorSpawnParameters SpawnParams;
+            SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+
+            ALanderPawn* Lander = GetWorld()->SpawnActor<ALanderPawn>(LanderPawnClass, SpawnLocation, SpawnRotation, SpawnParams);
             if (Lander)
             {
+                UE_LOG(LogTemp, Warning, TEXT("Returning to Lander"))
                 PlayerController->Possess(Lander);
                 Destroy(); // Remove the FPS character after switching
             }

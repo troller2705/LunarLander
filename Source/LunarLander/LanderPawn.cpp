@@ -29,21 +29,27 @@ void ALanderPawn::Tick(float DeltaTime)
 
 void ALanderPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-    PlayerInputComponent->BindAxis("MoveForward", this, &ALanderPawn::ThrustForward);
-    PlayerInputComponent->BindAxis("MoveRight", this, &ALanderPawn::ThrustRight);
-    PlayerInputComponent->BindAction("ExitLander", IE_Pressed, this, &ALanderPawn::ExitLander);
+    // Set up action bindings
+    if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+    {
+        // Moving
+        EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ALanderPawn::Move);
+    }
 }
 
-void ALanderPawn::ThrustForward(float Value)
+void ALanderPawn::Move(const FInputActionValue& Value)
 {
-    if (Value != 0.f)
-        LanderMesh->AddForce(GetActorForwardVector() * Value * 50000.f);
-}
+    // input is a Vector2D
+    FVector2D MovementVector = Value.Get<FVector2D>();
 
-void ALanderPawn::ThrustRight(float Value)
-{
-    if (Value != 0.f)
-        LanderMesh->AddForce(GetActorRightVector() * Value * 50000.f);
+    if (Controller != nullptr)
+    {
+        // add movement 
+        if (MovementVector.Y != 0.f)
+            LanderMesh->AddForce(GetActorForwardVector() * MovementVector.Y * 50000.f);
+        if (MovementVector.X != 0.f)
+            LanderMesh->AddForce(GetActorRightVector() * MovementVector.X * 50000.f);
+    }
 }
 
 void ALanderPawn::ExitLander()

@@ -10,6 +10,10 @@ class LUNARLANDER_API ALanderPawn : public APawn
 {
     GENERATED_BODY()
 
+    /** Move Input Action */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* MoveAction;
+
     public:
         ALanderPawn();
 
@@ -17,8 +21,9 @@ class LUNARLANDER_API ALanderPawn : public APawn
         virtual void BeginPlay() override;
         virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-        void ThrustForward(float Value);
-        void ThrustRight(float Value);
+        /** Called for movement input */
+        void Move(const FInputActionValue& Value);
+
         void ExitLander();
 
     public:
