@@ -30,8 +30,10 @@ void UGravityGunComponent::Grab()
     FCollisionQueryParams Params;
     Params.AddIgnoredActor(GetOwner());
 
+    UE_LOG(LogTemp, Warning, TEXT("Grab?"))
     if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_PhysicsBody, Params))
     {
+        UE_LOG(LogTemp, Warning, TEXT("Physics Body Hit"))
         if (Hit.GetComponent()->IsSimulatingPhysics())
         {
             PhysicsHandle->GrabComponentAtLocation(Hit.GetComponent(), NAME_None, Hit.Location);

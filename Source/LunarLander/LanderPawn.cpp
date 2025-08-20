@@ -64,6 +64,9 @@ void ALanderPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
     {
         // Moving
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ALanderPawn::Move);
+
+        //Lander Swapping
+        EnhancedInputComponent->BindAction(ExitLanderAction, ETriggerEvent::Completed, this, &ALanderPawn::ExitLander);
     }
 }
 
@@ -88,6 +91,7 @@ void ALanderPawn::ExitLander()
     {
         FActorSpawnParameters SpawnParams;
         SpawnParams.Owner = this;
+        SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
         FVector SpawnLocation = GetActorLocation() + FVector(100.f, 0.f, 0.f);
         FRotator SpawnRotation = GetActorRotation();
@@ -98,15 +102,15 @@ void ALanderPawn::ExitLander()
             AController* PlayerController = Cast<AController>(GetController());
             if (PlayerController)
             {
-                PlayerController->Possess(SpawnedFPSCharacter);
                 // HUD access requires cast to APlayerController
-                if (APlayerController* PC = Cast<APlayerController>(Controller))
+                if (APlayerController* PC = Cast<APlayerController>(GetController()))
                 {
                     if (ASharedHUD* HUD = Cast<ASharedHUD>(PC->GetHUD()))
                     {
                         HUD->SetPlayerMode(false); // switch to FPS UI
                     }
                 }
+                PlayerController->Possess(SpawnedFPSCharacter);
                 Destroy();
             }
         }

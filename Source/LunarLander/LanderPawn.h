@@ -14,6 +14,10 @@ class LUNARLANDER_API ALanderPawn : public APawn
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputAction* MoveAction;
 
+    /** Move Input Action */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* ExitLanderAction;
+
     public:
         ALanderPawn();
 

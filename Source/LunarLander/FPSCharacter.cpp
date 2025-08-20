@@ -17,6 +17,8 @@ AFPSCharacter::AFPSCharacter()
     PrimaryActorTick.bCanEverTick = true;
     GravityGun = CreateDefaultSubobject<UGravityGunComponent>(TEXT("GravityGunComponent"));
 
+    CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandleComponent"));
+
     // Set size for collision capsule
     GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
 
@@ -73,9 +75,9 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
         EnhancedInputComponent->BindAction(ExitLanderAction, ETriggerEvent::Completed, this, &AFPSCharacter::ReturnToLander);
 
         // Gravity Gun
-        /*EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, GravityGun, &UGravityGunComponent::Grab);
+        EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, GravityGun, &UGravityGunComponent::Grab);
         EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Completed, GravityGun, &UGravityGunComponent::Release);
-        EnhancedInputComponent->BindAction(LaunchAction, ETriggerEvent::Completed, GravityGun, &UGravityGunComponent::Launch);*/
+        EnhancedInputComponent->BindAction(LaunchAction, ETriggerEvent::Completed, GravityGun, &UGravityGunComponent::Launch);
     }
 }
 

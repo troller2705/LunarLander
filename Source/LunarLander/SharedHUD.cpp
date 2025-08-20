@@ -19,6 +19,7 @@ void ASharedHUD::SetPlayerMode(bool bIsInLander)
 {
     if (MainHUD)
     {
+        UE_LOG(LogTemp, Warning, TEXT("IsInLander: %s"), (bIsInLander ? TEXT("true") : TEXT("false")));
         MainHUD->OnPlayerModeChanged(bIsInLander); // Calls into Blueprint
     }
 }
