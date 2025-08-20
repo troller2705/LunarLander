@@ -21,6 +21,14 @@ ALanderPawn::ALanderPawn()
 void ALanderPawn::BeginPlay()
 {
     Super::BeginPlay();
+
+    if (APlayerController* PC = Cast<APlayerController>(GetController()))
+    {
+        if (ASharedHUD* HUD = Cast<ASharedHUD>(PC->GetHUD()))
+        {
+            HUD->SetPlayerMode(true);
+        }
+    }
 }
 
 void ALanderPawn::Tick(float DeltaTime)

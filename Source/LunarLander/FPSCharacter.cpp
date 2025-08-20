@@ -39,6 +39,14 @@ AFPSCharacter::AFPSCharacter()
 void AFPSCharacter::BeginPlay()
 {
     Super::BeginPlay();
+
+    APlayerController* PlayerController = Cast<APlayerController>(GetController());
+    if (PlayerController) {
+        if (ASharedHUD* HUD = Cast<ASharedHUD>(PlayerController->GetHUD()))
+        {
+            HUD->SetPlayerMode(false);
+        }
+    }
 }
 
 void AFPSCharacter::Tick(float DeltaTime)
