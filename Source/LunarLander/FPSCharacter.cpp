@@ -10,6 +10,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Engine/LocalPlayer.h"
+#include "SharedHUD.h"
 
 AFPSCharacter::AFPSCharacter()
 {
@@ -64,13 +65,13 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
         EnhancedInputComponent->BindAction(ExitLanderAction, ETriggerEvent::Completed, this, &AFPSCharacter::ReturnToLander);
 
         // Gravity Gun
-        EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, GravityGun, &UGravityGunComponent::Grab);
+        /*EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, GravityGun, &UGravityGunComponent::Grab);
         EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Completed, GravityGun, &UGravityGunComponent::Release);
-        EnhancedInputComponent->BindAction(LaunchAction, ETriggerEvent::Completed, GravityGun, &UGravityGunComponent::Launch);
+        EnhancedInputComponent->BindAction(LaunchAction, ETriggerEvent::Completed, GravityGun, &UGravityGunComponent::Launch);*/
     }
 }
 
-void ALunarLanderCharacter::Move(const FInputActionValue& Value)
+void AFPSCharacter::Move(const FInputActionValue& Value)
 {
     // input is a Vector2D
     FVector2D MovementVector = Value.Get<FVector2D>();
@@ -83,7 +84,7 @@ void ALunarLanderCharacter::Move(const FInputActionValue& Value)
     }
 }
 
-void ALunarLanderCharacter::Look(const FInputActionValue& Value)
+void AFPSCharacter::Look(const FInputActionValue& Value)
 {
     // input is a Vector2D
     FVector2D LookAxisVector = Value.Get<FVector2D>();
@@ -118,6 +119,10 @@ void AFPSCharacter::ReturnToLander()
             {
                 UE_LOG(LogTemp, Warning, TEXT("Returning to Lander"))
                 PlayerController->Possess(Lander);
+                if (ASharedHUD* HUD = Cast<ASharedHUD>(PlayerController->GetHUD()))
+                {
+                    HUD->SetPlayerMode(true);
+                }
                 Destroy(); // Remove the FPS character after switching
             }
         }

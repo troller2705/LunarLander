@@ -2,7 +2,7 @@
 
 
 #include "TP_WeaponComponent.h"
-#include "LunarLanderCharacter.h"
+#include "FPSCharacter.h"
 #include "LunarLanderProjectile.h"
 #include "GameFramework/PlayerController.h"
 #include "Camera/PlayerCameraManager.h"
@@ -66,7 +66,7 @@ void UTP_WeaponComponent::Fire()
 	}
 }
 
-bool UTP_WeaponComponent::AttachWeapon(ALunarLanderCharacter* TargetCharacter)
+bool UTP_WeaponComponent::AttachWeapon(AFPSCharacter* TargetCharacter)
 {
 	Character = TargetCharacter;
 

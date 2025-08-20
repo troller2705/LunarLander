@@ -3,6 +3,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "FPSCharacter.h"
+#include "SharedHUD.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
@@ -25,6 +26,27 @@ void ALanderPawn::BeginPlay()
 void ALanderPawn::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+
+    // Compute altitude & velocity
+    float Altitude = GetActorLocation().Z;
+    float Velocity = GetVelocity().Size();
+
+    if (Velocity != 0)
+    {
+        // Example: fuel drains
+        Fuel -= DeltaTime * 0.5f;
+    }
+
+    // Push updates to HUD
+    if (APlayerController* PC = Cast<APlayerController>(GetController()))
+    {
+        if (ASharedHUD* HUD = Cast<ASharedHUD>(PC->GetHUD()))
+        {
+            HUD->UpdateFuel(Fuel);
+            HUD->UpdateAltitude(Altitude);
+            HUD->UpdateVelocity(Velocity);
+        }
+    }
 }
 
 void ALanderPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -42,7 +64,7 @@ void ALanderPawn::Move(const FInputActionValue& Value)
     // input is a Vector2D
     FVector2D MovementVector = Value.Get<FVector2D>();
 
-    if (Controller != nullptr)
+    if (Controller != nullptr && Fuel > 0)
     {
         // add movement 
         if (MovementVector.Y != 0.f)
@@ -69,6 +91,15 @@ void ALanderPawn::ExitLander()
             if (PlayerController)
             {
                 PlayerController->Possess(SpawnedFPSCharacter);
+                // HUD access requires cast to APlayerController
+                if (APlayerController* PC = Cast<APlayerController>(Controller))
+                {
+                    if (ASharedHUD* HUD = Cast<ASharedHUD>(PC->GetHUD()))
+                    {
+                        HUD->SetPlayerMode(false); // switch to FPS UI
+                    }
+                }
+                Destroy();
             }
         }
     }

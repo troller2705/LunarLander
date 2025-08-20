@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "LunarLanderCharacter.h"
+#include "FPSCharacter.h"
 #include "LanderPawn.generated.h"
 
 UCLASS()
@@ -16,6 +16,10 @@ class LUNARLANDER_API ALanderPawn : public APawn
 
     public:
         ALanderPawn();
+
+        // Tunable values exposed to editor
+        UPROPERTY(EditAnywhere)
+        float Fuel = 100.f;
 
     protected:
         virtual void BeginPlay() override;
