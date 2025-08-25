@@ -76,7 +76,7 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
         // Gravity Gun
         EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, GravityGun, &UGravityGunComponent::Grab);
-        EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Completed, GravityGun, &UGravityGunComponent::Release);
+        EnhancedInputComponent->BindAction(ReleaseAction, ETriggerEvent::Completed, GravityGun, &UGravityGunComponent::Release);
         EnhancedInputComponent->BindAction(LaunchAction, ETriggerEvent::Completed, GravityGun, &UGravityGunComponent::Launch);
     }
 }

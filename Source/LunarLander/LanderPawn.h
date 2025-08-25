@@ -40,6 +40,24 @@ class LUNARLANDER_API ALanderPawn : public APawn
         UPROPERTY(VisibleAnywhere)
         class UStaticMeshComponent* LanderMesh;
 
+        UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Thrusters")
+        class UPhysicsThrusterComponent* MainThruster;
+
+        // 2.5D Rotation Thrusters
+        UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Thrusters")
+        UPhysicsThrusterComponent* RotateLeftThruster;
+
+        UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Thrusters")
+        UPhysicsThrusterComponent* RotateRightThruster;
+
+        // Base strengths you can tweak in editor
+        UPROPERTY(EditAnywhere, Category = "Thrusters")
+        float MainThrustBase = 3.0e5f;
+
+        UPROPERTY(EditAnywhere, Category = "Thrusters")
+        float RotThrustBase = 3.0e5f;
+
+
         UPROPERTY(EditAnywhere)
         TSubclassOf<class AFPSCharacter> FPSCharacterClass;
 

@@ -36,6 +36,7 @@ void UGravityGunComponent::Grab()
         UE_LOG(LogTemp, Warning, TEXT("Physics Body Hit"))
         if (Hit.GetComponent()->IsSimulatingPhysics())
         {
+            UE_LOG(LogTemp, Warning, TEXT("Is Simulating Physics"))
             PhysicsHandle->GrabComponentAtLocation(Hit.GetComponent(), NAME_None, Hit.Location);
         }
     }
@@ -45,6 +46,7 @@ void UGravityGunComponent::Release()
 {
     if (PhysicsHandle && PhysicsHandle->GrabbedComponent)
     {
+        UE_LOG(LogTemp, Warning, TEXT("Release?"))
         PhysicsHandle->ReleaseComponent();
     }
 }
