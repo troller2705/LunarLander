@@ -3,3 +3,16 @@
 
 #include "MainMenuHUD.h"
 
+void AMainMenuHUD::BeginPlay()
+{
+    Super::BeginPlay();
+
+    if (MainMenuClass)
+    {
+        MainMenu = CreateWidget<UMainMenuWidget>(GetWorld(), MainMenuClass);
+        if (MainMenu)
+        {
+            MainMenu->AddToViewport();
+        }
+    }
+}
