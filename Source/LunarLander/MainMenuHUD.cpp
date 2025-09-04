@@ -13,6 +13,8 @@ void AMainMenuHUD::BeginPlay()
         if (MainMenu)
         {
             MainMenu->AddToViewport();
+            PlayerOwner->bShowMouseCursor = true;
+            PlayerOwner->SetInputMode(FInputModeUIOnly());
         }
     }
 }

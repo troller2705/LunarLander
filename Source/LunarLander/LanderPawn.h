@@ -62,6 +62,8 @@ class LUNARLANDER_API ALanderPawn : public APawn
         TSubclassOf<class AFPSCharacter> FPSCharacterClass;
 
     private:
+        bool isGameover;
+
         UPROPERTY()
         AFPSCharacter* SpawnedFPSCharacter;
 };

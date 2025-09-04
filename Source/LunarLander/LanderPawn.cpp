@@ -62,6 +62,8 @@ void ALanderPawn::Tick(float DeltaTime)
     float Altitude = GetActorLocation().Z - 100;
     float Velocity = GetVelocity().Size();
 
+    if (isGameover) return;
+
     // Push updates to HUD
     if (APlayerController* PC = Cast<APlayerController>(GetController()))
     {
@@ -70,6 +72,11 @@ void ALanderPawn::Tick(float DeltaTime)
             HUD->UpdateFuel(Fuel);
             HUD->UpdateAltitude(Altitude);
             HUD->UpdateVelocity(Velocity);
+            if (Fuel <= 0 || Altitude > 5000)
+            {
+                isGameover = true;
+                HUD->OnGameover();
+            }
         }
     }
 }

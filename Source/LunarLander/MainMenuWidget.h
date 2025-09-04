@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "MainMenuWidget.generated.h"
 
 UCLASS()
@@ -15,6 +17,9 @@ class LUNARLANDER_API UMainMenuWidget : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 
+	UPROPERTY(EditAnywhere, Category = Levels, meta = (AllowPrivateAccess = "true"))
+	TSoftObjectPtr<UWorld> GameLevel;
+
 	UPROPERTY(meta = (BindWidget))
 	UButton* StartBTN;
 
@@ -24,13 +29,13 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UButton* ExitBTN;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Menu")
+	UFUNCTION(Category = "Menu")
 	void OnStartClick();
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Menu")
+	UFUNCTION(Category = "Menu")
 	void OnSettingsClick();
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Menu")
+	UFUNCTION(Category = "Menu")
 	void OnExitClick();
 
 };

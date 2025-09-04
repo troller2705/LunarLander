@@ -11,7 +11,19 @@ void ASharedHUD::BeginPlay()
         if (MainHUD)
         {
             MainHUD->AddToViewport();
+            PlayerOwner->bShowMouseCursor = false;
+            PlayerOwner->SetInputMode(FInputModeGameOnly());
         }
+    }
+}
+
+void ASharedHUD::OnGameover()
+{
+    if (MainHUD)
+    {
+        MainHUD->OnGameover();
+        PlayerOwner->bShowMouseCursor = true;
+        PlayerOwner->SetInputMode(FInputModeUIOnly());
     }
 }
 

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
 #include "MainHUDWidget.h"   // include our new class
@@ -16,6 +18,9 @@ public:
 
     UPROPERTY()
     UMainHUDWidget* MainHUD;
+
+    UFUNCTION(BlueprintCallable, Category = "HUD")
+    void OnGameover();
 
     // Mode switching
     UFUNCTION(BlueprintCallable, Category = "HUD")
